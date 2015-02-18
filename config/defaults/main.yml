@@ -1,0 +1,4 @@
+---
+redmine_release_path: "{{ RELEASE_PATH }}"
+
+redmine_database_adapter: "{{ DATABASE_URL.split(':') | first }}"

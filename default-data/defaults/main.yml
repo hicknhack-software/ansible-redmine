@@ -1,0 +1,8 @@
+---
+redmine_release_path: "{{ RELEASE_PATH }}"
+
+# language code for the default data
+redmine_default_data_language: 'en'
+
+# RAILS_ENV configuration used
+redmine_env: 'production'

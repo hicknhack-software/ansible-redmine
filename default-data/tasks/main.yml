@@ -1,0 +1,11 @@
+---
+- name: load
+  command: >
+    {{ profile }}'REDMINE_LANG={{redmine_default_data_language}}
+    RAILS_ENV={{ redmine_env }}
+    bundle exec rake redmine:load_default_data'
+  args:
+    chdir: '{{ redmine_release_path }}'
+  register: redmine_default_data_result
+  changed_when: "'already loaded' not in redmine_default_data_result.stdout"
+  failed_when: "'Error:' in redmine_default_data_result.stdout"
