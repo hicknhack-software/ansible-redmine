@@ -6,3 +6,6 @@ redmine_default_data_language: 'en'
 
 # RAILS_ENV configuration used
 redmine_env: 'production'
+
+# Change the default admin password (empty means keep default)
+redmine_admin_password: ''

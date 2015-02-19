@@ -9,3 +9,19 @@
   register: redmine_default_data_result
   changed_when: "'already loaded' not in redmine_default_data_result.stdout"
   failed_when: "'Error:' in redmine_default_data_result.stdout"
+
+- name: admin password
+  command: >
+    {{ profile }}'RAILS_ENV={{ redmine_env }}
+    bundle exec rails runner "user = User.where(login: \"{{ redmine_admin_login }}\").first;
+    exit unless user.check_password? \"{{ redmine_admin_password_default }}\";
+    user.password = user.password_confirmation = \"{{ redmine_admin_password }}\";
+    user.save!;
+    p \"changed\""'
+  args:
+    chdir: '{{ redmine_release_path }}'
+  register: redmine_admin_password_result
+  changed_when: "'changed' in redmine_admin_password_result.stdout"
+  when: redmine_admin_password != ''
+  tags:
+  - redmine_admin_password

@@ -12,7 +12,8 @@ Content Roles
 -------------
 
 * **config** create the necessary configurations for Redmine
-* **default_data** load the Redmine default_data with a specific language
+* **default_data** load the Redmine default_data and change the intial admin password
+* **rmagick** imagemagick support for Redmine
 
 Dependencies
 ------------
