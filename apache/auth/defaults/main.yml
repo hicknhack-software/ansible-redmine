@@ -1,0 +1,35 @@
+---
+# full URL to the database
+redmine_apache_auth_database_url: '{{ DATABASE_URL }}'
+
+# package that allows to access the redmine database by perl
+redmine_apache_auth_perl_database_package: "{{ redmine_apache_perl_database_packages[redmine_apache_auth_database_type] if redmine_apache_auth_database_type in redmine_apache_perl_database_packages else 'unknown-database-perl-adapter' }}"
+
+# namespace of the perl dbi for the database
+redmine_apache_auth_database_dbi: "{{ redmine_apache_perl_database_module[redmine_apache_auth_database_type] if redmine_apache_auth_database_type in redmine_apache_perl_database_module else 'unknown-database-perl-adapter' }}"
+
+# dissect the database_url as Perl DBI uses DSN strings
+# TODO: harden this
+redmine_apache_auth_database_type: "{{ redmine_apache_auth_database_url.split(':') | first | lower }}"
+redmine_apache_auth_database_name: "{{ redmine_apache_auth_database_url.split('/') | last }}"
+redmine_apache_auth_database_host: "{{ ((redmine_apache_auth_database_url.split('@') | last).split('/') | first).split(':') | first }}"
+redmine_apache_auth_database_port: "{{ ((redmine_apache_auth_database_url.split('@') | last).split('/') | first).split(':') | last }}"
+redmine_apache_auth_database_user: "{{ (redmine_apache_auth_database_url.split('://') | last).split(':') | first }}"
+redmine_apache_auth_database_password: "{{ ((redmine_apache_auth_database_url.split('://') | last).split('@') | first).split(':') | last }}"
+
+# url to the auth script
+redmine_apache_auth_url: 'https://github.com/redmine/redmine/raw/{{ git_branch }}/extra/svn/Redmine.pm'
+
+# path where the auth script is stored and accessable for git and subversion
+redmine_apache_auth_perl_path: '/usr/lib/perl5'
+redmine_apache_auth_perl_module: 'Apache2::Authn::Redmine'
+redmine_apache_auth_file: "{{ redmine_apache_auth_perl_path }}/{{ redmine_apache_auth_perl_module.split('::') | join('/') }}.pm"
+
+# Perl namespace the Authn Redmine.pm module is available in
+redmine_apache_auth_perl_package: 'Apache::Authn::Redmine'
+
+# path where apache configuration files are located
+redmine_apache_server_conf_available_folder: '{{ apache_server_conf_available_folder }}'
+
+# name of the apache configuration file
+redmine_apache_config_name: 'redmine_auth'

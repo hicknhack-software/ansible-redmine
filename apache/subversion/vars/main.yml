@@ -1,0 +1,11 @@
+---
+redmine_apache_subversion_packages:
+- subversion
+- libapache2-svn
+
+redmine_apache_subversion_modules:
+- dav
+- dav_svn
+
+redmine_apache_subversion_https_fix_modules:
+- headers

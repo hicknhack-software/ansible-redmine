@@ -1,0 +1,15 @@
+---
+redmine_apache_perl_database_packages:
+  mysql: libdbd-mysql-perl
+  mysql2: libdbd-mysql-perl
+  postgresql: libdbd-pg-perl
+
+redmine_apache_perl_database_module:
+  mysql: mysql
+  mysql2: mysql
+  postgresql: Pg
+
+redmine_apache_auth_packages:
+- libapache2-mod-perl2
+- libapache-dbi-perl
+- '{{ redmine_apache_auth_perl_database_package }}'

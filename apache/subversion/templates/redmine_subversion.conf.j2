@@ -1,0 +1,27 @@
+# {{ ansible_managed }}
+
+{% if redmine_apache_subversion_https_fix | bool %}
+RequestHeader edit Destination ^https http early
+{% endif %}
+
+<Location {{ redmine_apache_subversion_url_path }}>
+  DAV svn
+  SVNParentPath "{{ redmine_apache_subversion_folder }}"
+
+  AuthType Basic
+  AuthName "{{ redmine_apache_subversion_auth_name }}"
+  Require valid-user
+
+  LimitXMLRequestBody 0
+  SVNPathAuthz off
+
+  <Limit GET PROPFIND OPTIONS REPORT>
+    Require ip {{ redmine_apache_subversion_auth_allow_ip }}
+  </Limit>
+
+  PerlAccessHandler {{ redmine_apache_subversion_auth_perl_package }}::access_handler
+  PerlAuthenHandler {{ redmine_apache_subversion_auth_perl_package }}::authen_handler
+  RedmineDSN "{{ redmine_apache_subversion_auth_dsn }}"
+  RedmineDbUser "{{ redmine_apache_subversion_auth_db_user }}"
+  RedmineDbPass "{{ redmine_apache_subversion_auth_db_password }}"
+</Location>

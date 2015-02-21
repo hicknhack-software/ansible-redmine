@@ -1,0 +1,6 @@
+# {{ ansible_managed }}
+
+PerlLoadModule Apache::DBI
+PerlOptions +GlobalRequest
+
+PerlLoadModule {{ redmine_apache_auth_perl_module }}

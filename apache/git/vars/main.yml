@@ -1,0 +1,14 @@
+---
+reminde_apache_git_repository: 'ppa:git-core/ppa'
+
+redmine_apache_git_packages:
+- git
+- git-core
+
+redmine_apache_git_modules:
+- cgid
+
+redmine_apache_git_https_fix_modules:
+- headers
+
+redmine_apache_git_backend: '/usr/lib/git-core/git-http-backend'

@@ -1,0 +1,36 @@
+---
+# apply the fix necessary to work behind an ssl proxy
+redmine_apache_subversion_https_fix: '{{ redmine_apache_https_fix | default(false) }}'
+
+# name of the apache vhost
+redmine_apache_subversion_vhost: '{{ app_domain }}'
+
+# folder where the subversion repositories are stored
+redmine_apache_subversion_folder: '/var/subversion'
+redmine_apache_subversion_folder_user: "{{ apache_server_user | default('www-data') }}"
+redmine_apache_subversion_folder_group: "{{ apache_server_group | default('www-data') }}"
+
+# url path where subversion repositories are hosted
+redmine_apache_subversion_url_path: '/svn'
+
+# names of scripts to manage git repositories (empty names will be skipped)
+redmine_apache_subversion_create_script_name: 'svn_createrep.sh'
+redmine_apache_subversion_fix_script_name: 'svn_fixpermissions.sh'
+
+# path where apache configuration files are located
+redmine_apache_server_sites_include_folder: '{{ apache_server_sites_include_folder }}'
+
+# name of the apache configuration
+redmine_apache_subversion_config_name: 'redmine-subversion'
+
+# basic auth name
+redmine_apache_subversion_auth_name: 'Redmine Subversion'
+
+# ip addresses that are allowed to access the subversion repositories
+redmine_apache_subversion_auth_allow_ip: '{{ ansible_default_ipv4.address }}'
+
+# auth facts
+redmine_apache_subversion_auth_perl_package: '{{ REDMINE_APACHE_AUTH_PERL_PACKAGE }}'
+redmine_apache_subversion_auth_dsn: "{{ REDMINE_APACHE_AUTH_DSN }}"
+redmine_apache_subversion_auth_db_user: "{{ REDMINE_APACHE_AUTH_DB_USER }}"
+redmine_apache_subversion_auth_db_password: "{{ REDMINE_APACHE_AUTH_DB_PASSWORD }}"

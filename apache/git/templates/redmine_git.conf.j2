@@ -1,0 +1,29 @@
+# {{ ansible_managed }}
+
+{% if redmine_apache_git_https_fix | bool %}
+RequestHeader edit Destination ^https http early
+{% endif %}
+
+SetEnv GIT_PROJECT_ROOT "{{ redmine_apache_git_folder }}"
+SetEnv GIT_HTTP_EXPORT_ALL
+SetEnvIf Request_URI ^{{ redmine_apache_git_url_path }} REMOTE_USER=$REDIRECT_REMOTE_USER
+
+AliasMatch ^{{ redmine_apache_git_url_path }}/(.*/objects/[0-9a-f]{2}/[0-9a-f]{38})$          {{ redmine_apache_git_folder }}/$1
+AliasMatch ^{{ redmine_apache_git_url_path }}/(.*/objects/pack/pack-[0-9a-f]{40}.(pack|idx))$ {{ redmine_apache_git_folder }}/$1
+ScriptAlias {{ redmine_apache_git_url_path }}/ {{ redmine_apache_git_backend }}/
+
+<Location {{ redmine_apache_git_url_path }}>
+  Options ExecCGI FollowSymLinks
+  AddHandler cgi-script cgi
+
+  AuthType Basic
+  AuthName "{{ redmine_apache_git_auth_name }}"
+  Require valid-user
+
+  PerlAccessHandler {{ redmine_apache_git_auth_perl_package }}::access_handler
+  PerlAuthenHandler {{ redmine_apache_git_auth_perl_package }}::authen_handler
+  RedmineDSN "{{ redmine_apache_git_auth_dsn }}"
+  RedmineDbUser "{{ redmine_apache_git_auth_db_user }}"
+  RedmineDbPass "{{ redmine_apache_git_auth_db_password }}"
+  RedmineGitSmartHttp yes
+</Location>

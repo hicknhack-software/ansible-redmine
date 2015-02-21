@@ -12,8 +12,11 @@ Content Roles
 -------------
 
 * **config** create the necessary configurations for Redmine
-* **default_data** load the Redmine default_data and change the intial admin password
+* **default-data** load the Redmine default_data and change the intial admin password
 * **rmagick** imagemagick support for Redmine
+* **apache/auth** configure and enable Apache authentication through Redmine
+* **apache/subversion** host Subversion repositories through Apache (requires Redmine authentication)
+* **apache/git** host Git repositories through Apache (requires Redmine authentication)
 
 Dependencies
 ------------

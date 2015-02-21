@@ -1,0 +1,52 @@
+---
+- name: install packages
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+    state: latest
+    cache_valid_time: 86400
+  with_items: redmine_apache_auth_packages
+  notify: restart
+
+- name: Authn Folder
+  file:
+    dest: "{{ redmine_apache_auth_file | dirname }}"
+    state: directory
+
+- name: Redmine.pm
+  get_url:
+    url: "{{ redmine_apache_auth_url }}"
+    dest: "{{ redmine_apache_auth_file }}"
+  notify: restart
+
+- name: auth conf
+  template:
+    dest: "{{ redmine_apache_server_conf_available_folder }}/{{ redmine_apache_config_name }}.conf"
+    src: 'redmine_auth.j2'
+  notify: restart
+
+- name: enable auth
+  command: 'a2enconf {{ redmine_apache_config_name }}'
+  register: redmine_apache_auth_conf_enable_result
+  changed_when: "'Enabling conf' in redmine_apache_auth_conf_enable_result.stdout"
+  notify: restart
+
+- name: facts
+  set_fact:
+    REDMINE_APACHE_AUTH_PERL_PACKAGE: "{{ redmine_apache_auth_perl_package }}"
+    REDMINE_APACHE_AUTH_DSN: >
+      {{
+      [
+        'DBI',
+        redmine_apache_auth_database_dbi,
+        [
+          'database=' + redmine_apache_auth_database_name,
+          'host=' + redmine_apache_auth_database_host,
+          'port=' + redmine_apache_auth_database_port
+        ] | join(';')
+      ] | join(':')
+      }}
+    REDMINE_APACHE_AUTH_DB_USER: "{{ redmine_apache_auth_database_user }}"
+    REDMINE_APACHE_AUTH_DB_PASSWORD: "{{ redmine_apache_auth_database_password }}"
+  tags:
+  - facts
