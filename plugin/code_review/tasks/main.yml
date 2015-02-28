@@ -1,0 +1,38 @@
+---
+- name: install packages
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+    state: present
+    cache_valid_time: 86400
+  sudo_user: 'root'
+  when: (provisioned is defined)
+    and (provisioned | bool)
+  with_items: redmine_code_review_packages
+
+- name: check
+  command: >
+    grep -F
+    "version '{{ redmine_code_review_version }}'"
+    {{ redmine_plugins_folder }}/{{ redmine_code_review_plugin_name }}/init.rb
+  failed_when: no
+  changed_when: no
+  register: redmine_plugin_code_review_check
+  tags:
+  - facts
+
+- name: download
+  get_url:
+    url: '{{ redmine_code_review_url }}'
+    dest: '{{ tmp_folder }}/{{ redmine_code_review_url | basename }}'
+  when: redmine_plugin_code_review_check.rc != 0
+
+- name: unpack
+  unarchive:
+    src: '{{ tmp_folder }}/{{ redmine_code_review_url | basename }}'
+    dest: '{{ redmine_plugins_folder }}'
+    copy: no
+  when: redmine_plugin_code_review_check.rc != 0
+  notify:
+  - redmine plugins migrate
+  - restart required

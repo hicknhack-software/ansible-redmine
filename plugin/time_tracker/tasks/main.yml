@@ -1,0 +1,20 @@
+---
+- name: install packages
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+    state: present
+    cache_valid_time: 86400
+  sudo_user: 'root'
+  when: (provisioned is defined)
+    and (provisioned | bool)
+  with_items: redmine_time_tracker_packages
+
+- name: git
+  git:
+    repo: '{{ redmine_time_tracker_git_repo }}'
+    version: '{{ redmine_time_tracker_git_version }}'
+    dest: '{{ redmine_plugins_folder }}/{{ redmine_time_tracker_plugin_name }}'
+  notify:
+  - redmine plugins migrate
+  - restart required

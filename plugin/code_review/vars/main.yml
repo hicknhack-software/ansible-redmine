@@ -1,0 +1,5 @@
+---
+redmine_code_review_plugin_name: 'redmine_code_review'
+
+redmine_code_review_packages:
+- unzip

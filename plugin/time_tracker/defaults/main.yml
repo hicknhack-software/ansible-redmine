@@ -1,0 +1,12 @@
+---
+redmine_time_tracker_git_repo: 'https://github.com/hicknhack-software/redmine_time_tracker.git'
+redmine_time_tracker_git_version: '0.9.20'
+
+# path where current redmine release is assembled
+redmine_release_path: "{{ RELEASE_PATH }}"
+
+# RAILS_ENV configuration used
+redmine_env: '{{ rails_env }}'
+
+# folder where plugins are installed
+redmine_plugins_folder: '{{ redmine_release_path }}/plugins'

@@ -1,0 +1,18 @@
+---
+redmine_periodictask_git_repo: 'https://github.com/jperelli/Redmine-Periodic-Task.git'
+redmine_periodictask_git_version: '4a5451eb22cf7d70548ac9514f9beac1fcb50473'
+
+redmine_periodictask_cron_month: '*'
+redmine_periodictask_cron_weekday: '*'
+redmine_periodictask_cron_day: '*'
+redmine_periodictask_cron_hour: '*/2'
+redmine_periodictask_cron_minute: '*'
+
+# path where current redmine release is assembled
+redmine_release_path: "{{ RELEASE_PATH }}"
+
+# RAILS_ENV configuration used
+redmine_env: '{{ rails_env }}'
+
+# folder where plugins are installed
+redmine_plugins_folder: '{{ redmine_release_path }}/plugins'

@@ -5,7 +5,7 @@ redmine_release_path: "{{ RELEASE_PATH }}"
 redmine_default_data_language: 'en'
 
 # RAILS_ENV configuration used
-redmine_env: 'production'
+redmine_env: '{{ rails_env }}'
 
 # Change the default admin password (empty means keep default)
 redmine_admin_password: ''

@@ -1,0 +1,23 @@
+---
+- name: git
+  git:
+    repo: '{{ redmine_periodictask_git_repo }}'
+    version: '{{ redmine_periodictask_git_version }}'
+    dest: '{{ redmine_plugins_folder }}/{{ redmine_periodictask_plugin_name }}'
+  notify:
+  - redmine plugins migrate
+  - restart required
+
+- name: cron
+  cron:
+    name: 'Redmine {{ redmine_periodictask_plugin_name }}'
+    job: >
+      {{ profile }}'cd {{ redmine_release_path }};
+      RAILS_ENV={{ redmine_env }}
+      bundle exec rake redmine:check_periodictasks'
+    user: '{{ app_user }}'
+    month: '{{ redmine_periodictask_cron_month }}'
+    weekday: '{{ redmine_periodictask_cron_weekday }}'
+    day: '{{ redmine_periodictask_cron_day }}'
+    hour: '{{ redmine_periodictask_cron_hour }}'
+    minute: '{{ redmine_periodictask_cron_minute }}'
