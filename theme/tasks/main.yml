@@ -1,0 +1,6 @@
+---
+- name: git
+  git:
+    repo: '{{ redmine_theme_git_repo }}'
+    version: '{{ redmine_theme_git_version }}'
+    dest: '{{ redmine_themes_folder }}/{{ redmine_theme_name }}'

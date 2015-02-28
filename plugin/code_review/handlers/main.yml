@@ -1,13 +1,5 @@
 ---
-- name: redmine plugins migrate
-  command: >
-    {{ profile }}'RAILS_ENV={{ redmine_env }}
-    bundle exec rake redmine:plugins:migrate'
-  args:
-    chdir: '{{ redmine_release_path }}'
-  run_once: true
-
-- name: restart required
+- name: restart rails app
   file:
-    path: "{{ redmine_release_path }}/tmp/restart.txt"
+    path: "{{ RAILS_APP_RESTART_PATH }}"
     state: touch

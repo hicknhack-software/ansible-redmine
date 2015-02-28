@@ -12,3 +12,5 @@ redmine_apache_git_https_fix_modules:
 - headers
 
 redmine_apache_git_backend: '/usr/lib/git-core/git-http-backend'
+
+redmine_apache_git_vhost_path: "{{ APACHE_SERVER_SITES_INCLUDE_PATH }}/{{ redmine_apache_git_vhost }}"

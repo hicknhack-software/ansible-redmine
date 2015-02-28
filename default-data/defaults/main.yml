@@ -1,5 +1,5 @@
 ---
-redmine_release_path: "{{ RELEASE_PATH }}"
+redmine_release_path: "{{ RAILS_APP_RELEASE_PATH }}"
 
 # language code for the default data
 redmine_default_data_language: 'en'

@@ -19,9 +19,9 @@ RequestHeader edit Destination ^https http early
     Require ip {{ redmine_apache_subversion_auth_allow_ip }}
   </Limit>
 
-  PerlAccessHandler {{ redmine_apache_subversion_auth_perl_package }}::access_handler
-  PerlAuthenHandler {{ redmine_apache_subversion_auth_perl_package }}::authen_handler
-  RedmineDSN "{{ redmine_apache_subversion_auth_dsn }}"
-  RedmineDbUser "{{ redmine_apache_subversion_auth_db_user }}"
-  RedmineDbPass "{{ redmine_apache_subversion_auth_db_password }}"
+  PerlAccessHandler {{ REDMINE_APACHE_AUTH_PERL_PACKAGE }}::access_handler
+  PerlAuthenHandler {{ REDMINE_APACHE_AUTH_PERL_PACKAGE }}::authen_handler
+  RedmineDSN "{{ REDMINE_APACHE_AUTH_DSN }}"
+  RedmineDbUser "{{ REDMINE_APACHE_AUTH_DB_USER }}"
+  RedmineDbPass "{{ REDMINE_APACHE_AUTH_DB_PASSWORD }}"
 </Location>

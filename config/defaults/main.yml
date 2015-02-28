@@ -1,4 +1,4 @@
 ---
-redmine_release_path: "{{ RELEASE_PATH }}"
+redmine_release_path: "{{ RAILS_APP_RELEASE_PATH }}"
 
 redmine_database_adapter: "{{ DATABASE_URL.split(':') | first }}"

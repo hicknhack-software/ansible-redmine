@@ -4,9 +4,15 @@
     repo: '{{ redmine_periodictask_git_repo }}'
     version: '{{ redmine_periodictask_git_version }}'
     dest: '{{ redmine_plugins_folder }}/{{ redmine_periodictask_plugin_name }}'
+  register: redmine_plugin_periodictask_result
   notify:
-  - redmine plugins migrate
-  - restart required
+  - restart rails app
+
+- name: fact
+  set_fact:
+    REDMINE_BUNDLE: yes
+    REDMINE_PLUGIN_MIGRATE: yes
+  when: redmine_plugin_periodictask_result.changed
 
 - name: cron
   cron:

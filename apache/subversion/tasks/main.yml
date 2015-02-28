@@ -6,7 +6,8 @@
     state: latest
     cache_valid_time: 86400
   with_items: redmine_apache_subversion_packages
-  notify: restart
+  notify:
+  - restart apache
 
 - name: apache modules
   apache2_module:
@@ -14,7 +15,8 @@
   with_flattened:
   - redmine_apache_subversion_modules
   - '{{ redmine_apache_subversion_https_fix_modules if redmine_apache_subversion_https_fix else [] }}'
-  notify: restart
+  notify:
+  - restart apache
 
 - name: folder
   file:
@@ -40,6 +42,7 @@
 
 - name: apache conf
   template:
-    dest: "{{ redmine_apache_server_sites_include_folder }}/{{ redmine_apache_subversion_vhost }}/{{ redmine_apache_subversion_config_name }}.conf"
+    dest: "{{ redmine_apache_subversion_vhost_path }}/{{ redmine_apache_subversion_config_name }}.conf"
     src: 'redmine_subversion.conf.j2'
-  notify: restart
+  notify:
+  - restart apache

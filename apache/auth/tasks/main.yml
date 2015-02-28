@@ -21,7 +21,7 @@
 
 - name: auth conf
   template:
-    dest: "{{ redmine_apache_server_conf_available_folder }}/{{ redmine_apache_config_name }}.conf"
+    dest: "{{ APACHE_SERVER_CONF_AVAILABLE_PATH }}/{{ redmine_apache_config_name }}.conf"
     src: 'redmine_auth.j2'
   notify: restart
 

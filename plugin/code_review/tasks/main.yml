@@ -33,6 +33,12 @@
     dest: '{{ redmine_plugins_folder }}'
     copy: no
   when: redmine_plugin_code_review_check.rc != 0
+  register: redmine_plugin_code_review_result
   notify:
-  - redmine plugins migrate
-  - restart required
+  - restart rails app
+
+- name: fact
+  set_fact:
+    REDMINE_BUNDLE: yes
+    REDMINE_PLUGIN_MIGRATE: yes
+  when: redmine_plugin_code_review_result.changed

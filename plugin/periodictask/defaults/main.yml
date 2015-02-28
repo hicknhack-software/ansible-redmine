@@ -9,7 +9,7 @@ redmine_periodictask_cron_hour: '*/2'
 redmine_periodictask_cron_minute: '*'
 
 # path where current redmine release is assembled
-redmine_release_path: "{{ RELEASE_PATH }}"
+redmine_release_path: "{{ RAILS_APP_RELEASE_PATH }}"
 
 # RAILS_ENV configuration used
 redmine_env: '{{ rails_env }}'

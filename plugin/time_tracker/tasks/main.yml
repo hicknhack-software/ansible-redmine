@@ -15,6 +15,12 @@
     repo: '{{ redmine_time_tracker_git_repo }}'
     version: '{{ redmine_time_tracker_git_version }}'
     dest: '{{ redmine_plugins_folder }}/{{ redmine_time_tracker_plugin_name }}'
+  register: redmine_plugin_time_tracker_result
   notify:
-  - redmine plugins migrate
-  - restart required
+  - restart rails app
+
+- name: fact
+  set_fact:
+    REDMINE_BUNDLE: yes
+    REDMINE_PLUGIN_MIGRATE: yes
+  when: redmine_plugin_time_tracker_result.changed

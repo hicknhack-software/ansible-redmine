@@ -1,0 +1,11 @@
+---
+redmine_theme_git_repo: 'https://github.com/tsi/redmine-theme-flat.git'
+redmine_theme_git_version: 'master'
+
+redmine_theme_name: "{{ (redmine_theme_git_repo | basename).split('.') | first }}"
+
+# path where current redmine release is assembled
+redmine_release_path: "{{ RAILS_APP_RELEASE_PATH }}"
+
+# folder where plugins are installed
+redmine_themes_folder: '{{ redmine_release_path }}/public/themes'

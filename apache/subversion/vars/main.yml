@@ -9,3 +9,5 @@ redmine_apache_subversion_modules:
 
 redmine_apache_subversion_https_fix_modules:
 - headers
+
+redmine_apache_subversion_vhost_path: "{{ APACHE_SERVER_SITES_INCLUDE_PATH }}/{{ redmine_apache_subversion_vhost }}"

@@ -42,6 +42,6 @@
 
 - name: apache conf
   template:
-    dest: "{{ redmine_apache_server_sites_include_folder }}/{{ redmine_apache_git_vhost }}/{{ redmine_apache_git_config_name }}.conf"
+    dest: "{{ redmine_apache_git_vhost_path }}/{{ redmine_apache_git_config_name }}.conf"
     src: 'redmine_git.conf.j2'
   notify: restart
