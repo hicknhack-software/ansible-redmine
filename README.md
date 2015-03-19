@@ -21,7 +21,7 @@ Content Roles
 Dependencies
 ------------
 
-* dresden-weekly.Rails roles
+* [dresden-weekly.Rails](https://github.com/dresden-weekly/ansible-rails) roles
 
 You may want to use our [vagrant-ansible-remote](https://github.com/dresden-weekly/vagrant-ansible-remote) for testing and deploying
 
