@@ -1,4 +1,4 @@
-hickhack-software.redmine
+hickhack-software.Redmine
 ====================
 
 A set of roles that help to deploy the Redmine web application.
