@@ -1,25 +1,25 @@
 ---
-- name: install packages
+- name: Install packages
   apt:
     name: "{{ item }}"
     update_cache: yes
     state: present
     cache_valid_time: 86400
-  sudo_user: 'root'
+  become_user: "root"
   when: (provisioned is defined)
     and (provisioned | bool)
-  with_items: redmine_time_tracker_packages
+  with_items: "{{ redmine_time_tracker_packages }}"
 
-- name: git
+- name: Git
   git:
-    repo: '{{ redmine_time_tracker_git_repo }}'
-    version: '{{ redmine_time_tracker_git_version }}'
-    dest: '{{ redmine_plugins_folder }}/{{ redmine_time_tracker_plugin_name }}'
+    repo: "{{ redmine_time_tracker_git_repo }}"
+    version: "{{ redmine_time_tracker_git_version }}"
+    dest: "{{ redmine_plugins_folder }}/{{ redmine_time_tracker_plugin_name }}"
   register: redmine_plugin_time_tracker_result
   notify:
   - restart rails app
 
-- name: fact
+- name: Fact
   set_fact:
     REDMINE_BUNDLE: yes
     REDMINE_PLUGIN_MIGRATE: yes

@@ -1,5 +1,5 @@
 ---
-redmine_time_tracker_plugin_name: 'redmine_time_tracker'
+redmine_time_tracker_plugin_name: "redmine_time_tracker"
 
 redmine_time_tracker_packages:
 - nodejs
