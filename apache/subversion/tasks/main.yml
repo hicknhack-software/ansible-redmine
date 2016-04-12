@@ -1,48 +1,48 @@
 ---
-- name: install packages
+- name: Install packages
   apt:
     name: "{{ item }}"
     update_cache: yes
     state: latest
     cache_valid_time: 86400
-  with_items: redmine_apache_subversion_packages
+  with_items: "{{ redmine_apache_subversion_packages }}"
   notify:
   - restart apache
 
-- name: apache modules
+- name: Apache modules
   apache2_module:
-    name: '{{ item }}'
+    name: "{{ item }}"
   with_flattened:
-  - redmine_apache_subversion_modules
-  - '{{ redmine_apache_subversion_https_fix_modules if redmine_apache_subversion_https_fix else [] }}'
+  - "{{ redmine_apache_subversion_modules }}"
+  - "{{ redmine_apache_subversion_https_fix_modules if redmine_apache_subversion_https_fix else [] }}"
   notify:
   - restart apache
 
-- name: folder
+- name: Folder
   file:
-    dest: '{{ redmine_apache_subversion_folder }}'
+    dest: "{{ redmine_apache_subversion_folder }}"
     state: directory
-    owner: '{{ redmine_apache_subversion_folder_user }}'
-    group: '{{ redmine_apache_subversion_folder_group }}'
-    mode: '2775' # include the change group bit
+    owner: "{{ redmine_apache_subversion_folder_user }}"
+    group: "{{ redmine_apache_subversion_folder_group }}"
+    mode: "2775" # include the change group bit
 
-- name: create script
+- name: Create script
   copy:
-    src: 'svn_createrep.sh'
-    dest: '{{ redmine_apache_subversion_folder }}/{{ redmine_apache_subversion_create_script_name }}'
-    mode: '700'
+    src: "svn_createrep.sh"
+    dest: "{{ redmine_apache_subversion_folder }}/{{ redmine_apache_subversion_create_script_name }}"
+    mode: "700"
   when: redmine_apache_subversion_create_script_name != ''
 
-- name: fix permission script
+- name: Fix permission script
   copy:
-    src: 'svn_fixpermissions.sh'
-    dest: '{{ redmine_apache_subversion_folder }}/{{ redmine_apache_subversion_fix_script_name }}'
-    mode: '700'
+    src: "svn_fixpermissions.sh"
+    dest: "{{ redmine_apache_subversion_folder }}/{{ redmine_apache_subversion_fix_script_name }}"
+    mode: "700"
   when: redmine_apache_subversion_fix_script_name != ''
 
-- name: apache conf
+- name: Apache conf
   template:
     dest: "{{ redmine_apache_subversion_vhost_path }}/{{ redmine_apache_subversion_config_name }}.conf"
-    src: 'redmine_subversion.conf.j2'
+    src: "redmine_subversion.conf.j2"
   notify:
   - restart apache

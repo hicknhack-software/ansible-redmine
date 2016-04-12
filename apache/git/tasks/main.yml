@@ -1,47 +1,47 @@
 ---
 - name: Add repo
   apt_repository:
-    repo: '{{ reminde_apache_git_repository }}'
+    repo: "{{ reminde_apache_git_repository }}"
 
-- name: install packages
+- name: Install packages
   apt:
     name: "{{ item }}"
     update_cache: yes
     state: latest
     cache_valid_time: 86400
-  with_items: redmine_apache_git_packages
+  with_items: "{{ redmine_apache_git_packages }}"
   notify: restart
 
-- name: apache modules
+- name: Apache modules
   apache2_module:
-    name: '{{ item }}'
+    name: "{{ item }}"
   with_flattened:
-  - redmine_apache_git_modules
-  - '{{ redmine_apache_git_https_fix_modules if redmine_apache_git_https_fix else [] }}'
+  - "{{ redmine_apache_git_modules }}"
+  - "{{ redmine_apache_git_https_fix_modules if redmine_apache_git_https_fix else [] }}"
   notify: restart
 
 - name: folder
   file:
-    dest: '{{ redmine_apache_git_folder }}'
+    dest: "{{ redmine_apache_git_folder }}"
     state: directory
-    owner: '{{ redmine_apache_git_folder_user }}'
-    group: '{{ redmine_apache_git_folder_group }}'
-    mode: '2775' # include the change group bit
+    owner: "{{ redmine_apache_git_folder_user }}"
+    group: "{{ redmine_apache_git_folder_group }}"
+    mode: "2775" # include the change group bit
 
-- name: create script
+- name: Create script
   copy:
-    src: 'git_createrep.sh'
-    dest: '{{ redmine_apache_git_folder }}/{{ redmine_apache_git_create_script_name }}'
-    mode: '700'
+    src: "git_createrep.sh"
+    dest: "{{ redmine_apache_git_folder }}/{{ redmine_apache_git_create_script_name }}"
+    mode: "700"
 
-- name: fix permission script
+- name: Fix permission script
   copy:
-    src: 'git_fixpermissions.sh'
-    dest: '{{ redmine_apache_git_folder }}/{{ redmine_apache_git_fix_script_name }}'
-    mode: '700'
+    src: "git_fixpermissions.sh"
+    dest: "{{ redmine_apache_git_folder }}/{{ redmine_apache_git_fix_script_name }}"
+    mode: "700"
 
-- name: apache conf
+- name: Apache conf
   template:
     dest: "{{ redmine_apache_git_vhost_path }}/{{ redmine_apache_git_config_name }}.conf"
-    src: 'redmine_git.conf.j2'
+    src: "redmine_git.conf.j2"
   notify: restart

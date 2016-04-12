@@ -12,4 +12,4 @@ redmine_apache_perl_database_module:
 redmine_apache_auth_packages:
 - libapache2-mod-perl2
 - libapache-dbi-perl
-- '{{ redmine_apache_auth_perl_database_package }}'
+- "{{ redmine_apache_auth_perl_database_package }}"
