@@ -41,10 +41,10 @@ Roadmap
 -------
 
 * SCM
-  * ☐ Git Hosting
-  * ☐ SVN Hosting 
+  * [ ] Git Hosting
+  * [ ] SVN Hosting
 * Database support
-  * ☐ MySql
+  * [ ] MySql
 * Install Redmine Plugins
 * Activate Redmine Skins
 

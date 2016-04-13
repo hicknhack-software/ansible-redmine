@@ -1,11 +1,11 @@
 ---
-- name: install packages
+- name: Install packages
   apt:
     name: "{{ item }}"
     update_cache: yes
     state: latest
     cache_valid_time: 86400
-  with_items: redmine_apache_auth_packages
+  with_items: "{{ redmine_apache_auth_packages }}"
   notify: restart
 
 - name: Authn Folder
@@ -19,14 +19,14 @@
     dest: "{{ redmine_apache_auth_file }}"
   notify: restart
 
-- name: auth conf
+- name: Auth conf
   template:
     dest: "{{ APACHE_SERVER_CONF_AVAILABLE_PATH }}/{{ redmine_apache_config_name }}.conf"
-    src: 'redmine_auth.j2'
+    src: "redmine_auth.j2"
   notify: restart
 
-- name: enable auth
-  command: 'a2enconf {{ redmine_apache_config_name }}'
+- name: Enable auth
+  command: "a2enconf {{ redmine_apache_config_name }}"
   register: redmine_apache_auth_conf_enable_result
   changed_when: "'Enabling conf' in redmine_apache_auth_conf_enable_result.stdout"
   notify: restart

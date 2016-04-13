@@ -1,16 +1,16 @@
 ---
-- name: load
+- name: Load
   command: >
-    {{ profile }}'REDMINE_LANG={{redmine_default_data_language}}
+    {{ profile }}'REDMINE_LANG={{ redmine_default_data_language }}
     RAILS_ENV={{ redmine_env }}
     bundle exec rake redmine:load_default_data'
   args:
-    chdir: '{{ redmine_release_path }}'
+    chdir: "{{ redmine_release_path }}"
   register: redmine_default_data_result
   changed_when: "'already loaded' not in redmine_default_data_result.stdout"
   failed_when: "'Error:' in redmine_default_data_result.stdout"
 
-- name: admin password
+- name: Admin password
   command: >
     {{ profile }}'RAILS_ENV={{ redmine_env }}
     bundle exec rails runner "user = User.where(login: \"{{ redmine_admin_login }}\").first;
@@ -19,7 +19,7 @@
     user.save!;
     p \"changed\""'
   args:
-    chdir: '{{ redmine_release_path }}'
+    chdir: "{{ redmine_release_path }}"
   register: redmine_admin_password_result
   changed_when: "'changed' in redmine_admin_password_result.stdout"
   when: redmine_admin_password != ''

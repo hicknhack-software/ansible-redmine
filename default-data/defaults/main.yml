@@ -2,10 +2,10 @@
 redmine_release_path: "{{ RAILS_APP_RELEASE_PATH }}"
 
 # language code for the default data
-redmine_default_data_language: 'en'
+redmine_default_data_language: "en"
 
 # RAILS_ENV configuration used
-redmine_env: '{{ rails_env }}'
+redmine_env: "{{ rails_env }}"
 
 # Change the default admin password (empty means keep default)
-redmine_admin_password: ''
+redmine_admin_password: ""

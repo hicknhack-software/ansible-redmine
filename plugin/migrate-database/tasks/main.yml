@@ -4,7 +4,7 @@
     {{ profile }}'RAILS_ENV={{ redmine_env }}
     bundle exec rake redmine:plugins:migrate'
   args:
-    chdir: '{{ RAILS_APP_RELEASE_PATH }}'
+    chdir: "{{ RAILS_APP_RELEASE_PATH }}"
   run_once: true
   register: rails_plugin_migrate_database_result
   changed_when: "'migrating' in rails_plugin_migrate_database_result.stdout"

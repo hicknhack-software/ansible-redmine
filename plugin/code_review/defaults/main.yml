@@ -1,14 +1,14 @@
 ---
-redmine_code_review_version: '0.6.5'
-redmine_code_review_url: 'https://bitbucket.org/haru_iida/redmine_code_review/downloads/redmine_code_review-{{ redmine_code_review_version }}.zip'
+redmine_code_review_version: "0.6.5"
+redmine_code_review_url: "https://bitbucket.org/haru_iida/redmine_code_review/downloads/redmine_code_review-{{ redmine_code_review_version }}.zip"
 
 # path where current redmine release is assembled
 redmine_release_path: "{{ RAILS_APP_RELEASE_PATH }}"
 
 # RAILS_ENV configuration used
-redmine_env: '{{ rails_env }}'
+redmine_env: "{{ rails_env }}"
 
 # folder where plugins are installed
-redmine_plugins_folder: '{{ redmine_release_path }}/plugins'
+redmine_plugins_folder: "{{ redmine_release_path }}/plugins"
 
-tmp_folder: '/tmp'
+tmp_folder: "/tmp"

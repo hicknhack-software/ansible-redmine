@@ -1,19 +1,19 @@
 ---
-- name: install packages
+- name: Install packages
   apt:
     name: "{{ item }}"
     update_cache: yes
     state: present
     cache_valid_time: 86400
-  sudo_user: 'root'
+  become_user: "root"
   when: (provisioned is defined)
     and (provisioned | bool)
-  with_items: redmine_code_review_packages
+  with_items: "{{ redmine_code_review_packages }}"
 
-- name: check
+- name: Check
   command: >
     grep -F
-    "version '{{ redmine_code_review_version }}'"
+    "version "{{ redmine_code_review_version }}""
     {{ redmine_plugins_folder }}/{{ redmine_code_review_plugin_name }}/init.rb
   failed_when: no
   changed_when: no
@@ -21,23 +21,23 @@
   tags:
   - facts
 
-- name: download
+- name: Download
   get_url:
-    url: '{{ redmine_code_review_url }}'
-    dest: '{{ tmp_folder }}/{{ redmine_code_review_url | basename }}'
+    url: "{{ redmine_code_review_url }}"
+    dest: "{{ tmp_folder }}/{{ redmine_code_review_url | basename }}"
   when: redmine_plugin_code_review_check.rc != 0
 
-- name: unpack
+- name: Unpack
   unarchive:
-    src: '{{ tmp_folder }}/{{ redmine_code_review_url | basename }}'
-    dest: '{{ redmine_plugins_folder }}'
+    src: "{{ tmp_folder }}/{{ redmine_code_review_url | basename }}"
+    dest: "{{ redmine_plugins_folder }}"
     copy: no
   when: redmine_plugin_code_review_check.rc != 0
   register: redmine_plugin_code_review_result
   notify:
   - restart rails app
 
-- name: fact
+- name: Fact
   set_fact:
     REDMINE_BUNDLE: yes
     REDMINE_PLUGIN_MIGRATE: yes
