@@ -21,7 +21,7 @@ redmine_apache_auth_database_password: "{{ ((database_url.split('://') | last).s
 redmine_apache_auth_url: "https://github.com/redmine/redmine/raw/{{ git_branch }}/extra/svn/Redmine.pm"
 
 # path where the auth script is stored and accessable for git and subversion
-redmine_apache_auth_perl_path: "/usr/lib/perl5"
+redmine_apache_auth_perl_path: "/usr/share/perl5"
 redmine_apache_auth_perl_module: "Apache2::Authn::Redmine"
 redmine_apache_auth_file: "{{ redmine_apache_auth_perl_path }}/{{ redmine_apache_auth_perl_module.split('::') | join('/') }}.pm"
 
