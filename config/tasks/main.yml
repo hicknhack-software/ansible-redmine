@@ -22,3 +22,8 @@
     dest: "{{ redmine_release_path }}/config/initializers/secret_token.rb"
     content: "RedmineApp::Application.config.secret_token = ENV['SECRET_KEY_BASE']"
     mode: "600"
+
+- name: redmine config
+  template:
+    dest: "{{ redmine_release_path }}/config/configuration.yml"
+    src: configuration.yml.j2
