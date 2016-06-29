@@ -3,7 +3,15 @@ redmine_release_path: "{{ RAILS_APP_RELEASE_PATH }}"
 
 redmine_database_adapter: "{{ DATABASE_URL.split(':') | first }}"
 
-# configure the connection to the mailserver
-# mail_server_domain: localhost
-# mail_server_address: localhost
-# mail_server_port: 25
+# mailserver config in one hash (partial hash allowed)
+mail_server:
+  enabled: false
+  domain: localhost
+  address: "{{ mail_server.domain }}"
+  port: 25
+
+# configure the connection to the mailserver (use to override hash)
+mail_server_enabled: "{{ mail_server.enabled | default(false) }}"
+mail_server_domain: "{{ mail_server.domain | default('localhost') }}"
+mail_server_address: "{{ mail_server.address | default('localhost') }}"
+mail_server_port: "{{ mail_server.port | default(25) }}"
