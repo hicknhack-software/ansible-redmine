@@ -1,0 +1,4 @@
+mail_server:
+  domain: "{{ mail_server_domain | default('localhost') }}"
+  address: "{{ mail_server_address | default('localhost') }}"
+  port: "{{ mail_server_port | default(25) }}"

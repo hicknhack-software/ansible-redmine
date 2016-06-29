@@ -2,3 +2,8 @@
 redmine_release_path: "{{ RAILS_APP_RELEASE_PATH }}"
 
 redmine_database_adapter: "{{ DATABASE_URL.split(':') | first }}"
+
+# configure the connection to the mailserver
+# mail_server_domain: localhost
+# mail_server_address: localhost
+# mail_server_port: 25
