@@ -1,0 +1,13 @@
+# {{ ansible_managed }}
+
+{% if mail_server_enabled %}
+default:
+  email_delivery:
+    delivery_method: :smtp
+    smtp_settings:
+      domain: "{{ mail_server_domain }}"
+      address: "{{  mail_server_address }}"
+      openssl_verify_mode: "none"
+      port: {{ mail_server_port }}
+      enable_starttls_auto: true
+{% endif %}
