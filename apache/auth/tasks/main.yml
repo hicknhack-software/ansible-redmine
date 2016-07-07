@@ -34,7 +34,7 @@
 - name: facts
   set_fact:
     REDMINE_APACHE_AUTH_PERL_PACKAGE: "{{ redmine_apache_auth_perl_package }}"
-    REDMINE_APACHE_AUTH_DSN: >
+    REDMINE_APACHE_AUTH_DSN: >-
       {{
       [
         'DBI',
