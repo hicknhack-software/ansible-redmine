@@ -13,5 +13,5 @@ mail_server:
 # configure the connection to the mailserver (use to override hash)
 mail_server_enabled: "{{ mail_server.enabled | default(false) }}"
 mail_server_domain: "{{ mail_server.domain | default('localhost') }}"
-mail_server_address: "{{ mail_server.address | default('localhost') }}"
+mail_server_address: "{{ mail_server.address | mail_server_domain }}"
 mail_server_port: "{{ mail_server.port | default(25) }}"
