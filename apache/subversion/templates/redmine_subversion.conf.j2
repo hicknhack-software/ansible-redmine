@@ -16,7 +16,10 @@ RequestHeader edit Destination ^https http early
   SVNPathAuthz off
 
   <Limit GET PROPFIND OPTIONS REPORT>
-    Require ip {{ redmine_apache_subversion_auth_allow_ip }}
+    <RequireAny>
+      Require valid-user
+      Require ip {{ redmine_apache_subversion_auth_allow_ip }}
+    </RequireAny>
   </Limit>
 
   PerlAccessHandler {{ REDMINE_APACHE_AUTH_PERL_PACKAGE }}::access_handler
