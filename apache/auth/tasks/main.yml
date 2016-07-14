@@ -31,6 +31,24 @@
   changed_when: "'Enabling conf' in redmine_apache_auth_conf_enable_result.stdout"
   notify: restart
 
+# Redmine.pm only works with the prefork model
+- name: Disable Worker & Event
+  apache2_module:
+    state: absent
+    name: "{{ item }}"
+  with_items:
+    - mpm_worker
+    - mpm_event
+  notify: restart
+
+- name: Enable Prefork
+  apache2_module:
+    state: present
+    name: "{{ item }}"
+  with_items:
+    - mpm_prefork
+  notify: restart
+
 - name: facts
   set_fact:
     REDMINE_APACHE_AUTH_PERL_PACKAGE: "{{ redmine_apache_auth_perl_package }}"
