@@ -10,6 +10,7 @@ RequestHeader edit Destination ^https http early
 
   AuthType Basic
   AuthName "{{ redmine_apache_subversion_auth_name }}"
+  AuthUserFile /dev/null
   Require valid-user
 
   LimitXMLRequestBody 0
