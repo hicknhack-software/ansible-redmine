@@ -18,6 +18,7 @@ ScriptAlias {{ redmine_apache_git_url_path }}/ {{ redmine_apache_git_backend }}/
 
   AuthType Basic
   AuthName "{{ redmine_apache_git_auth_name }}"
+  AuthUserFile /dev/null
   Require valid-user
 
   PerlAccessHandler {{ REDMINE_APACHE_AUTH_PERL_PACKAGE }}::access_handler
