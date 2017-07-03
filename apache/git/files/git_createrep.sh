@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# File maintained by puppet. Do not change by hand!
+# File maintained by ansible. Do not change by hand!
 #
 
 FORCE=0
