@@ -3,14 +3,12 @@
   shell: "{{ profile }}'echo $DATABASE_URL'"
   changed_when: no
   register: redmine_database_url_result
-  tags:
-  - facts
+  tags: [always]
 
 - name: fact DATABASE_URL
   set_fact:
     DATABASE_URL: "{{ redmine_database_url_result.stdout }}"
-  tags:
-  - facts
+  tags: [always]
 
 - name: database.yml
   template:
