@@ -31,3 +31,15 @@
   template:
     dest: "{{ redmine_release_path }}/config/configuration.yml"
     src: configuration.yml.j2
+
+- name: no additional_environment.rb
+  file:
+    dest: "{{ redmine_release_path }}/config/additional_environment.rb"
+    state: absent
+  when: not ((redmine_additional_env is sequence) and (redmine_additional_env is not string) and (redmine_additional_env | length > 0))
+
+- name: additional_environment.rb
+  template:
+    dest: "{{ redmine_release_path }}/config/additional_environment.rb"
+    src: "additional_environment.rb.j2"
+  when: (redmine_additional_env is sequence) and (redmine_additional_env is not string) and (redmine_additional_env | length > 0)

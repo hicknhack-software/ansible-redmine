@@ -3,6 +3,10 @@ redmine_release_path: "{{ RAILS_APP_RELEASE_PATH }}"
 
 redmine_database_adapter: "{{ DATABASE_URL.split(':') | first }}"
 
+# content for config/additional_environment.rb
+# eg. "config.log_level = :warn"
+redmine_additional_env: []
+
 # mailserver config in one hash (partial hash allowed)
 mail_server:
   enabled: false
