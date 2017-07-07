@@ -3,14 +3,12 @@
   shell: "{{ profile }}'echo $DATABASE_URL'"
   changed_when: no
   register: redmine_database_url_result
-  tags:
-  - facts
+  tags: [always]
 
 - name: fact DATABASE_URL
   set_fact:
     DATABASE_URL: "{{ redmine_database_url_result.stdout }}"
-  tags:
-  - facts
+  tags: [always]
 
 - name: database.yml
   template:
@@ -18,9 +16,15 @@
     src: "database.yml.j2"
 
 - name: secret_token.rb
-  copy:
+  template:
     dest: "{{ redmine_release_path }}/config/initializers/secret_token.rb"
-    content: "RedmineApp::Application.config.secret_token = ENV['SECRET_KEY_BASE']"
+    src: "secret_token.rb.j2"
+    mode: "600"
+
+- name: secrets.yml
+  template:
+    dest: "{{ redmine_release_path }}/config/secrets.yml"
+    src: "secrets.yml.j2"
     mode: "600"
 
 - name: redmine config

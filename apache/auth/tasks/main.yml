@@ -32,6 +32,14 @@
   notify: restart
 
 # Redmine.pm only works with the prefork model
+- name: Enable Prefork
+  apache2_module:
+    state: present
+    name: "{{ item }}"
+  with_items:
+    - mpm_prefork
+  notify: restart
+
 - name: Disable Worker & Event
   apache2_module:
     state: absent
@@ -39,14 +47,6 @@
   with_items:
     - mpm_worker
     - mpm_event
-  notify: restart
-
-- name: Enable Prefork
-  apache2_module:
-    state: present
-    name: "{{ item }}"
-  with_items:
-    - mpm_prefork
   notify: restart
 
 - name: facts
