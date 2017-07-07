@@ -1,0 +1,5 @@
+# {{ ansible_managed }}
+
+{% for line in redmine_additional_env %}
+{{ line }}
+{% endfor %}
