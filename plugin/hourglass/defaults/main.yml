@@ -1,0 +1,12 @@
+---
+redmine_hourglass_git_repo: "https://github.com/hicknhack-software/redmine_hourglass.git"
+redmine_hourglass_git_version: "4e34814d207c35630930564fbc0335991ec32ecd"
+
+# path where current redmine release is assembled
+redmine_release_path: "{{ RAILS_APP_RELEASE_PATH }}"
+
+# RAILS_ENV configuration used
+redmine_env: "{{ rails_env }}"
+
+# folder where plugins are installed
+redmine_plugins_folder: "{{ redmine_release_path }}/plugins"

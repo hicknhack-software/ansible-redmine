@@ -1,0 +1,26 @@
+---
+- name: Install packages
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+    state: present
+    cache_valid_time: 86400
+  become: yes
+  when: (provisioned is defined)
+    and (provisioned | bool)
+  with_items: "{{ redmine_hourglass_packages }}"
+
+- name: Git
+  git:
+    repo: "{{ redmine_hourglass_git_repo }}"
+    version: "{{ redmine_hourglass_git_version }}"
+    dest: "{{ redmine_plugins_folder }}/{{ redmine_hourglass_plugin_name }}"
+  register: redmine_plugin_hourglass_result
+  notify:
+  - restart rails app
+
+- name: Fact
+  set_fact:
+    REDMINE_BUNDLE: yes
+    REDMINE_PLUGIN_MIGRATE: yes
+  when: redmine_plugin_hourglass_result.changed
