@@ -1,0 +1,10 @@
+---
+- name: Redmine plugins compile assets
+  command: >
+    {{ profile }}'RAILS_ENV={{ redmine_env }} {{ redmine_plugin_assets_extra_args | join(" ") }}
+    bundle exec rake redmine:plugins:assets'
+  args:
+    chdir: "{{ RAILS_APP_RELEASE_PATH }}"
+  run_once: true
+  register: rails_plugin_compile_assets_result
+  changed_when: "'Writing' in rails_compile_assets_result.stdout"

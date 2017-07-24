@@ -1,0 +1,8 @@
+---
+# Use a list of string for args to pass to rake
+# e.g
+# - FOO=bar
+# - BAR=foo
+#
+redmine_plugin_assets_extra_args:
+  - "RAILS_RELATIVE_URL_ROOT={{ site_url_path }}"
