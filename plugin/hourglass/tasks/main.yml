@@ -23,4 +23,5 @@
   set_fact:
     REDMINE_BUNDLE: yes
     REDMINE_PLUGIN_MIGRATE: yes
+    REDMINE_PLUGIN_ASSETS: yes
   when: redmine_plugin_hourglass_result.changed
