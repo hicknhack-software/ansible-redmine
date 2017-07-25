@@ -7,4 +7,4 @@
     chdir: "{{ RAILS_APP_RELEASE_PATH }}"
   run_once: true
   register: rails_plugin_compile_assets_result
-  changed_when: "'Writing' in rails_compile_assets_result.stdout"
+  changed_when: "'Writing' in rails_plugin_compile_assets_result.stdout"
