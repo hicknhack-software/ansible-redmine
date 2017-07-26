@@ -1,5 +1,5 @@
 ---
-# Use a list of string for args to pass to rake
+# Use a list of strings for args to pass to rake
 # e.g
 # - FOO=bar
 # - BAR=foo
