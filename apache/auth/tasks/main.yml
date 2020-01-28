@@ -66,5 +66,4 @@
       }}
     REDMINE_APACHE_AUTH_DB_USER: "{{ redmine_apache_auth_database_user }}"
     REDMINE_APACHE_AUTH_DB_PASSWORD: "{{ redmine_apache_auth_database_password }}"
-  tags:
-  - facts
+  tags: [always]

@@ -18,8 +18,7 @@
   failed_when: no
   changed_when: no
   register: redmine_plugin_code_review_check
-  tags:
-  - facts
+  tags: [always]
 
 - name: Download
   get_url:
