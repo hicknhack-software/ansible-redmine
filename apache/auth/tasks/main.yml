@@ -1,11 +1,10 @@
 ---
 - name: Install packages
   apt:
-    name: "{{ item }}"
+    name: "{{ redmine_apache_auth_packages }}"
     update_cache: yes
     state: latest
     cache_valid_time: 86400
-  with_items: "{{ redmine_apache_auth_packages }}"
   notify: restart
 
 - name: Authn Folder
