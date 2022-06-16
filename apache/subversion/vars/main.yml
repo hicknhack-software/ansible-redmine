@@ -1,7 +1,7 @@
 ---
 redmine_apache_subversion_packages:
 - subversion
-- libapache2-svn
+- libapache2-mod-svn
 
 redmine_apache_subversion_modules:
 - dav
