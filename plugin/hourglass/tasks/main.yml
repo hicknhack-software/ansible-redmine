@@ -5,7 +5,7 @@
     update_cache: yes
     state: present
     cache_valid_time: 86400
-  become: yes
+  become: true
   when: (provisioned is defined)
     and (provisioned | bool)
   with_items: "{{ redmine_hourglass_packages }}"
