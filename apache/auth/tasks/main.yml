@@ -1,55 +1,53 @@
 ---
 - name: Install packages
-  apt:
+  ansible.builtin.apt:
     name: "{{ redmine_apache_auth_packages }}"
-    update_cache: yes
+    update_cache: true
     state: latest
     cache_valid_time: 86400
-  notify: restart
+  notify: Restart
 
 - name: Authn Folder
-  file:
+  ansible.builtin.file:
     dest: "{{ redmine_apache_auth_file | dirname }}"
     state: directory
+    mode: "755"
 
-- name: Redmine.pm
-  get_url:
+- name: Create Redmine.pm
+  ansible.builtin.get_url:
     url: "{{ redmine_apache_auth_url }}"
     dest: "{{ redmine_apache_auth_file }}"
-  notify: restart
+    mode: "644"
+  notify: Restart
 
 - name: Auth conf
-  template:
+  ansible.builtin.template:
     dest: "{{ APACHE_SERVER_CONF_AVAILABLE_PATH }}/{{ redmine_apache_config_name }}.conf"
     src: "redmine_auth.j2"
-  notify: restart
+    mode: "644"
+  notify: Restart
 
 - name: Enable auth
-  command: "a2enconf {{ redmine_apache_config_name }}"
+  ansible.builtin.command: "a2enconf {{ redmine_apache_config_name }}"
   register: redmine_apache_auth_conf_enable_result
   changed_when: "'Enabling conf' in redmine_apache_auth_conf_enable_result.stdout"
-  notify: restart
+  notify: Restart
 
 # Redmine.pm only works with the prefork model
 - name: Enable Prefork
-  apache2_module:
-    state: present
-    name: "{{ item }}"
-  with_items:
-    - mpm_prefork
-  notify: restart
+  community.general.apache2_module:
+    state: "{{ item.state }}"
+    name: "{{ item.name }}"
+    ignore_configcheck: true
+    warn_mpm_absent: false
+  loop:
+    - {name: mpm_worker, state: absent}
+    - {name: mpm_event, state: absent}
+    - {name: mpm_prefork, state: present}
+  notify: Restart
 
-- name: Disable Worker & Event
-  apache2_module:
-    state: absent
-    name: "{{ item }}"
-  with_items:
-    - mpm_worker
-    - mpm_event
-  notify: restart
-
-- name: facts
-  set_fact:
+- name: Store Facts
+  ansible.builtin.set_fact:
     REDMINE_APACHE_AUTH_PERL_PACKAGE: "{{ redmine_apache_auth_perl_package }}"
     REDMINE_APACHE_AUTH_DSN: >-
       {{

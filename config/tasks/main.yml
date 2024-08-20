@@ -1,45 +1,48 @@
 ---
-- name: echo DATABASE_URL
-  shell: "{{ profile }}'echo $DATABASE_URL'"
-  changed_when: no
+- name: Read DATABASE_URL
+  ansible.builtin.shell: "{{ profile }}'echo $DATABASE_URL'"
+  changed_when: false
   register: redmine_database_url_result
   tags: [always]
 
-- name: fact DATABASE_URL
-  set_fact:
+- name: Store DATABASE_URL
+  ansible.builtin.set_fact:
     DATABASE_URL: "{{ redmine_database_url_result.stdout }}"
   tags: [always]
 
-- name: database.yml
-  template:
+- name: Create database.yml
+  ansible.builtin.template:
     dest: "{{ redmine_release_path }}/config/database.yml"
     src: "database.yml.j2"
+    mode: "644"
 
-- name: secret_token.rb
-  template:
+- name: Create secret_token.rb
+  ansible.builtin.template:
     dest: "{{ redmine_release_path }}/config/initializers/secret_token.rb"
     src: "secret_token.rb.j2"
     mode: "600"
 
-- name: secrets.yml
-  template:
+- name: Create secrets.yml
+  ansible.builtin.template:
     dest: "{{ redmine_release_path }}/config/secrets.yml"
     src: "secrets.yml.j2"
     mode: "600"
 
-- name: redmine config
-  template:
+- name: Create redmine config
+  ansible.builtin.template:
     dest: "{{ redmine_release_path }}/config/configuration.yml"
     src: configuration.yml.j2
+    mode: "644"
 
-- name: no additional_environment.rb
-  file:
+- name: Remove additional_environment.rb
+  ansible.builtin.file:
     dest: "{{ redmine_release_path }}/config/additional_environment.rb"
     state: absent
   when: not ((redmine_additional_env is sequence) and (redmine_additional_env is not string) and (redmine_additional_env | length > 0))
 
-- name: additional_environment.rb
-  template:
+- name: Create additional_environment.rb
+  ansible.builtin.template:
     dest: "{{ redmine_release_path }}/config/additional_environment.rb"
     src: "additional_environment.rb.j2"
+    mode: "644"
   when: (redmine_additional_env is sequence) and (redmine_additional_env is not string) and (redmine_additional_env | length > 0)

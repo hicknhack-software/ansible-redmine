@@ -1,11 +1,10 @@
 ---
 - name: Install
-  apt:
-    name: "{{ item }}"
-    update_cache: yes
+  ansible.builtin.apt:
+    pkg:
+      - "build-essential"
+      - "libmagickwand-dev"
+      - "imagemagick"
+    update_cache: true
     state: latest
     cache_valid_time: 86400
-  with_items:
-  - "build-essential"
-  - "libmagickwand-dev"
-  - "imagemagick"

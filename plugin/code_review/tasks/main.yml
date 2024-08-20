@@ -1,43 +1,44 @@
 ---
 - name: Install packages
-  apt:
+  ansible.builtin.apt:
     name: "{{ item }}"
-    update_cache: yes
+    update_cache: true
     state: present
     cache_valid_time: 86400
+  become: true
   become_user: "root"
   when: (provisioned is defined)
     and (provisioned | bool)
   with_items: "{{ redmine_code_review_packages }}"
 
 - name: Check
-  command: >
+  ansible.builtin.command: >
     grep -F
     "version "{{ redmine_code_review_version }}""
     {{ redmine_plugins_folder }}/{{ redmine_code_review_plugin_name }}/init.rb
-  failed_when: no
-  changed_when: no
+  failed_when: false
+  changed_when: false
   register: redmine_plugin_code_review_check
   tags: [always]
 
 - name: Download
-  get_url:
+  ansible.builtin.get_url:
     url: "{{ redmine_code_review_url }}"
     dest: "{{ tmp_folder }}/{{ redmine_code_review_url | basename }}"
+    mode: "644"
   when: redmine_plugin_code_review_check.rc != 0
 
 - name: Unpack
-  unarchive:
+  ansible.builtin.unarchive:
     src: "{{ tmp_folder }}/{{ redmine_code_review_url | basename }}"
     dest: "{{ redmine_plugins_folder }}"
-    copy: no
+    copy: false
   when: redmine_plugin_code_review_check.rc != 0
   register: redmine_plugin_code_review_result
-  notify:
-  - restart rails app
+  notify: Restart rails app
 
 - name: Fact
-  set_fact:
-    REDMINE_BUNDLE: yes
-    REDMINE_PLUGIN_MIGRATE: yes
-  when: redmine_plugin_code_review_result.changed
+  ansible.builtin.set_fact:
+    REDMINE_BUNDLE: true
+    REDMINE_PLUGIN_MIGRATE: true
+  when: redmine_plugin_code_review_result.changed and true

@@ -1,0 +1,198 @@
+---
+- name: Install Redmine Server
+  hosts: redmine_app
+  become: true
+  vars:
+    rails_env: production
+    app_domain: "localhost"
+    app_secret_key_base: "0edf6fdcbf610f5ad59c665d15deb17af10ff7b40e8a918f928771f885cfbdec"
+    app_group: redmine_app
+    app_user: deploy
+    app_path: '/home/deploy/redmine'
+    app_name: redmine
+    site_url_path: "/redmine"
+    rvm_gpg_keys: "7D2BAF1CF37B13E2069D6956105BD0E739499BDB"
+    rvm_gpg_key_server: "keyserver.ubuntu.com"
+    rvm_install_gems:
+      - "bundler"
+      - "strscan -v 3.0.7"
+
+    redmine_additional_env:
+      - "config.log_level = :warn"
+    redmine_deploy_archive:
+      - app
+      - bin
+      - config
+      - config.ru
+      - db
+      - Gemfile
+      - lib
+      - public
+      - Rakefile
+      - plugins # added
+      - test # added for api spec support
+      - package.json
+      - yarn.lock
+      # no vendor!
+    redmine_deploy_shared_folders: # default folders that are shared between releases
+      - bundle
+      - log
+      - tmp
+      - files # added
+      # no public/assets
+
+    bundle_flags:
+      - '--quiet'
+
+    db_user: redmine
+    db_password: redmine
+    db_name: redmine
+
+    redmine_database_adapter: "mysql2"
+    redmine_admin_password: "Ch4n53M3"
+    DATABASE_URL: "{{ redmine_database_adapter }}://{{ db_user }}:{{ db_password }}@127.0.0.1:3306/{{ db_name }}"
+
+    passenger_ruby: "{{ RUBY_BIN }}"
+
+    apache_set_env:
+      RAILS_ENV: "{{ rails_env }}"
+      SECRET_KEY_BASE: "{{ app_secret_key_base }}"
+      RAILS_LOG_FILE_PATH: "{{ RAILS_APP_LOG_PATH }}"
+      DATABASE_URL: "{{ DATABASE_URL }}"
+
+
+    git_url: "https://github.com/redmine/redmine.git"
+    git_branch: 5.1.9
+
+    ruby_version: 3.2.9
+
+    profile: '/bin/bash -lc -- '
+
+  pre_tasks:
+    - name: Upgrade VM and cache
+      ansible.builtin.apt:
+        upgrade: true
+        update_cache: true
+        cache_valid_time: 3600
+    - name: Install locales
+      ansible.builtin.apt:
+        name: ['locales', 'tzdata']
+    - name: Reset Locales
+      ansible.builtin.file:
+        path: '/etc/locale.gen'
+        state: 'absent'
+    - name: Recreate Locales
+      ansible.builtin.shell: |-
+        locale-gen "en_US.UTF-8";
+        localedef -i en_US -f UTF-8 en_US.UTF-8
+      changed_when: false
+
+    - name: Create App User
+      ansible.builtin.user:
+        name: "{{ app_user }}"
+        shell: /bin/bash
+    - name: Fix User Folder
+      ansible.builtin.file:
+        path: '/home/deploy'
+        state: 'directory'
+        mode: '755' # note: ubuntu default to 750
+
+  roles:
+    - role: geerlingguy.mysql
+      mysql_enabled_on_startup: true
+      mysql_bind_address: "127.0.0.1"
+      mysql_root_password: "mysql"
+      mysql_databases:
+        - name: "{{ db_name }}"
+      mysql_users:
+        - name: "{{ db_user }}"
+          password: "{{ db_password }}"
+          priv: "{{ db_name }}.*:ALL"
+
+    - role: dresden-weekly.rails/ruby/rvm
+    - role: dresden-weekly.rails/ruby/mysql
+
+    - role: dresden-weekly.rails/rails/folders
+      become: true
+      become_user: '{{ app_user }}'
+    - role: dresden-weekly.rails/rails/logrotate
+
+    - role: dresden-weekly.rails/user/profile
+      rails_user_name: "{{ app_user }}"
+      rails_user_bashrc_lines:
+        - "cd {{ RAILS_APP_BASE_PATH }} || true"
+        - "cd {{ RAILS_APP_CURRENT_PATH }} || true"
+      rails_user_env:
+        RAILS_ENV: "{{ rails_env }}"
+        SECRET_KEY_BASE: "{{ app_secret_key_base }}"
+        RAILS_LOG_FILE_PATH: "{{ RAILS_APP_LOG_PATH }}"
+        DATABASE_URL: "{{ DATABASE_URL }}"
+
+    - role: dresden-weekly.rails/apache/server
+    - role: dresden-weekly.rails/apache/passenger
+
+    - role: hicknhack-software.redmine/rmagick
+
+    - role: hicknhack-software.redmine/apache/auth
+      tags:
+        - redmine_auth
+
+    - role: hicknhack-software.redmine/apache/git
+      tags:
+        - redmine_auth
+
+    - role: hicknhack-software.redmine/apache/subversion
+      tags:
+        - redmine_auth
+
+    - role: dresden-weekly.rails/rails/create-release
+      become: true
+      become_user: "{{ app_user }}"
+      rails_release_id: "{{ rails_release_id_git_branch }}"
+      rails_deploy_archive: "{{ redmine_deploy_archive }}"
+      rails_deploy_shared_folders: "{{ redmine_deploy_shared_folders }}"
+
+    - role: hicknhack-software.redmine/config
+      become: true
+      become_user: "{{ app_user }}"
+
+    - role: dresden-weekly.rails/rails/tasks/bundle
+      become: true
+      become_user: '{{ app_user }}'
+      bundle_generate_binstubs: false
+
+    - role: dresden-weekly.rails/rails/tasks/migrate-database
+      become: true
+      become_user: '{{ app_user }}'
+
+    - role: hicknhack-software.redmine/default-data
+      become: true
+      become_user: "{{ app_user }}"
+
+    - role: dresden-weekly.rails/rails/update-current
+      become: true
+      become_user: '{{ app_user }}'
+
+    - role: dresden-weekly.rails/rails/cleanup-old-releases
+      become: true
+      become_user: '{{ app_user }}'
+
+  post_tasks:
+    - name: Add redmine redirect
+      ansible.builtin.lineinfile:
+        dest: "{{ apache_server_sites_include_path }}/{{ app_domain }}/redmine_redirect.conf"
+        line: "{{ item }}"
+        create: true
+        state: present
+        mode: "644"
+      with_items:
+        - "<Directory />"
+        - "  RedirectMatch ^/$ {{ site_url_path }}/"
+        - "</Directory>"
+      register: redmine_redirect
+
+    - name: Restart apache
+      ansible.builtin.service:
+        name: "apache2"
+        state: restarted
+      when: redmine_redirect.changed and true

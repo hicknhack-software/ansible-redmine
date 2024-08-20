@@ -1,26 +1,29 @@
 ---
 - name: Add repo
-  apt_repository:
-    repo: "{{ reminde_apache_git_repository }}"
+  ansible.builtin.apt_repository:
+    repo: "{{ redmine_apache_git_repository }}"
+  when: redmine_apache_git_repository | length > 0
+  retries: 5
+  delay: 3
+  register: result
+  until: result is not failed
 
 - name: Install packages
-  apt:
+  ansible.builtin.apt:
     name: "{{ redmine_apache_git_packages }}"
-    update_cache: yes
+    update_cache: true
     state: latest
     cache_valid_time: 86400
-  notify: restart
+  notify: Restart
 
 - name: Apache modules
-  apache2_module:
+  community.general.apache2_module:
     name: "{{ item }}"
-  with_flattened:
-  - "{{ redmine_apache_git_modules }}"
-  - "{{ redmine_apache_git_https_fix_modules if redmine_apache_git_https_fix else [] }}"
-  notify: restart
+  loop: "{{ [redmine_apache_git_modules, (redmine_apache_git_https_fix_modules if redmine_apache_git_https_fix else [])] | flatten }}"
+  notify: Restart
 
-- name: folder
-  file:
+- name: Git Folder
+  ansible.builtin.file:
     dest: "{{ redmine_apache_git_folder }}"
     state: directory
     owner: "{{ redmine_apache_git_folder_user }}"
@@ -28,19 +31,20 @@
     mode: "2775" # include the change group bit
 
 - name: Create script
-  copy:
+  ansible.builtin.copy:
     src: "git_createrep.sh"
     dest: "{{ redmine_apache_git_folder }}/{{ redmine_apache_git_create_script_name }}"
     mode: "700"
 
 - name: Fix permission script
-  copy:
+  ansible.builtin.copy:
     src: "git_fixpermissions.sh"
     dest: "{{ redmine_apache_git_folder }}/{{ redmine_apache_git_fix_script_name }}"
     mode: "700"
 
 - name: Apache conf
-  template:
+  ansible.builtin.template:
     dest: "{{ redmine_apache_git_vhost_path }}/{{ redmine_apache_git_config_name }}.conf"
     src: "redmine_git.conf.j2"
-  notify: restart
+    mode: "644"
+  notify: Restart

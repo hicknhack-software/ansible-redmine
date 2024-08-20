@@ -11,7 +11,7 @@ Requirements
 Dependencies
 ------------
 
-* **dresden-weekly.Rails/apache/server** - apache server and facts about pathes
+* **dresden-weekly.rails/apache/server** - apache server and facts about pathes
 * fact: **DATABASE_URL** - How to connect to the Redmine database
 
 Facts

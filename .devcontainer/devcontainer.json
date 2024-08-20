@@ -1,0 +1,34 @@
+{
+  "name": "redmine-ansible-dev",
+  "dockerComposeFile": [
+    "../docker-compose.yml",
+    "docker-compose.override.yml"
+  ],
+  "service": "ansible",
+  "overrideCommand": true,
+  "containerUser": "root",
+  "workspaceFolder": "/etc/ansible/roles/hicknhack-software.redmine",
+  // "capAdd": ["SYS_ADMIN", "SYS_RESOURCE"],
+  // "securityOpt": ["seccomp=unconfined", "label=disable", "apparmor=unconfined"],
+  "updateRemoteUserUID": true,
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "redhat.ansible"
+      ],
+      "settings": {
+        "redhat.telemetry.enabled": false,
+        "ansible.python.interpreterPath": "/bin/python3",
+        "ansible.lightspeed.enabled": false,
+        "ansible.executionEnvironment.enabled": false,
+        "files.associations": {
+          "**/defaults/*.yml": "ansible",
+          "**/handlers/*.yml": "ansible",
+          "**/tasks/*.yml": "ansible",
+          "**/vars/*.yml": "ansible",
+          "**/templates/*.j2": "ansible-jinja"
+        }
+      }
+    }
+  }
+}

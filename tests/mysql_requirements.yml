@@ -1,0 +1,12 @@
+collections:
+  - name: ansible.posix
+  - name: community.general
+  - name: community.mysql
+
+roles:
+  - name: "dresden-weekly.rails"
+    src: https://github.com/arBmind/ansible-rails.git
+    version: "3c2c25de348667c2d46534316fcb25fad31d2870"
+
+  - name: "geerlingguy.mysql"
+    version: "4.3.4"

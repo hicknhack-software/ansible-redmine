@@ -1,21 +1,20 @@
 ---
 - name: Git
-  git:
+  ansible.builtin.git:
     repo: "{{ redmine_periodictask_git_repo }}"
     version: "{{ redmine_periodictask_git_version }}"
     dest: "{{ redmine_plugins_folder }}/{{ redmine_periodictask_plugin_name }}"
   register: redmine_plugin_periodictask_result
-  notify:
-  - restart rails app
+  notify: Restart rails app
 
 - name: Fact
-  set_fact:
-    REDMINE_BUNDLE: yes
-    REDMINE_PLUGIN_MIGRATE: yes
-  when: redmine_plugin_periodictask_result.changed
+  ansible.builtin.set_fact:
+    REDMINE_BUNDLE: true
+    REDMINE_PLUGIN_MIGRATE: true
+  when: redmine_plugin_periodictask_result.changed and true
 
 - name: Cron
-  cron:
+  ansible.builtin.cron:
     name: "Redmine {{ redmine_periodictask_plugin_name }}"
     job: >
       {{ profile }}'cd {{ redmine_release_path }};

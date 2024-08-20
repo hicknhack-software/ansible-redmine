@@ -1,9 +1,9 @@
 ---
 - name: Redmine plugins migrate
-  command: >
-    {{ profile }}'RAILS_ENV={{ redmine_env }}
-    bundle exec rake redmine:plugins:migrate'
-  args:
+  ansible.builtin.command:
+    cmd: >
+      {{ profile }}'RAILS_ENV={{ redmine_env }}
+      bundle exec rake redmine:plugins:migrate'
     chdir: "{{ RAILS_APP_RELEASE_PATH }}"
   run_once: true
   register: rails_plugin_migrate_database_result

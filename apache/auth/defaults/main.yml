@@ -3,10 +3,16 @@
 database_url: "{{ DATABASE_URL }}"
 
 # package that allows to access the redmine database by perl
-redmine_apache_auth_perl_database_package: "{{ redmine_apache_perl_database_packages[redmine_apache_auth_database_type] if redmine_apache_auth_database_type in redmine_apache_perl_database_packages else 'unknown-database-perl-adapter' }}"
+redmine_apache_auth_perl_database_package: >-
+  {{ redmine_apache_perl_database_packages[redmine_apache_auth_database_type]
+    if redmine_apache_auth_database_type in redmine_apache_perl_database_packages
+    else 'unknown-database-perl-adapter' }}
 
 # namespace of the perl dbi for the database
-redmine_apache_auth_database_dbi: "{{ redmine_apache_perl_database_module[redmine_apache_auth_database_type] if redmine_apache_auth_database_type in redmine_apache_perl_database_module else 'unknown-database-perl-adapter' }}"
+redmine_apache_auth_database_dbi: >-
+  {{ redmine_apache_perl_database_module[redmine_apache_auth_database_type]
+    if redmine_apache_auth_database_type in redmine_apache_perl_database_module
+    else 'unknown-database-perl-adapter' }}
 
 # dissect the database_url as Perl DBI uses DSN strings
 # TODO: harden this

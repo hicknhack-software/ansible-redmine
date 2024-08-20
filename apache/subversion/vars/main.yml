@@ -1,13 +1,13 @@
 ---
 redmine_apache_subversion_packages:
-- subversion
-- libapache2-mod-svn
+  - subversion
+  - libapache2-mod-svn
 
 redmine_apache_subversion_modules:
-- dav
-- dav_svn
+  - dav
+  - dav_svn
 
 redmine_apache_subversion_https_fix_modules:
-- headers
+  - headers
 
 redmine_apache_subversion_vhost_path: "{{ APACHE_SERVER_SITES_INCLUDE_PATH }}/{{ redmine_apache_subversion_vhost }}"
