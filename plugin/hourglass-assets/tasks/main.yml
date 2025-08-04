@@ -1,0 +1,10 @@
+---
+- name: Redmine Hourglass plugin compile assets
+  ansible.builtin.command:
+    cmd: >
+      {{ profile }}'RAILS_ENV={{ redmine_env }} {{ redmine_plugin_assets_extra_args | join(" ") }}
+      bundle exec rake redmine:plugins:hourglass:precompile'
+    chdir: "{{ RAILS_APP_RELEASE_PATH }}"
+  # run_once: true
+  register: rails_plugin_compile_assets_result
+  changed_when: "'Writing' in rails_plugin_compile_assets_result.stdout"
