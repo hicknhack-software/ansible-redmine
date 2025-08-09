@@ -6,8 +6,8 @@ collections:
 
 roles:
   - name: "dresden-weekly.rails"
-    src: https://github.com/arBmind/ansible-rails.git
-    version: "3c2c25de348667c2d46534316fcb25fad31d2870"
+    src: https://github.com/dresden-weekly/ansible-rails.git
+    version: "e238ab97dda2955cf4937e261273afde7d373de6"
 
   - name: "geerlingguy.mysql"
     version: "4.3.4"

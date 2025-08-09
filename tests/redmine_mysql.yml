@@ -74,18 +74,6 @@
         upgrade: true
         update_cache: true
         cache_valid_time: 3600
-    - name: Install locales
-      ansible.builtin.apt:
-        name: ['locales', 'tzdata']
-    - name: Reset Locales
-      ansible.builtin.file:
-        path: '/etc/locale.gen'
-        state: 'absent'
-    - name: Recreate Locales
-      ansible.builtin.shell: |-
-        locale-gen "en_US.UTF-8";
-        localedef -i en_US -f UTF-8 en_US.UTF-8
-      changed_when: false
 
     - name: Create App User
       ansible.builtin.user:
