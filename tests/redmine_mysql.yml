@@ -15,7 +15,7 @@
     rvm_gpg_key_server: "keyserver.ubuntu.com"
     rvm_install_gems:
       - "bundler"
-      - "strscan -v 3.0.7"
+      - "strscan:3.0.7"
 
     redmine_additional_env:
       - "config.log_level = :warn"
