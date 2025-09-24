@@ -16,7 +16,7 @@ services:
       - '-c'
       - >-
         ansible-galaxy install -r tests/mysql_requirements.yml
-        && ansible-playbook --inventory-file=tests/docker-inventory.ini tests/redmine_mysql.yml
+        && ansible-playbook --inventory=tests/docker-inventory.ini tests/redmine_mysql.yml
     tty: true
     stdin_open: true
     environment:
